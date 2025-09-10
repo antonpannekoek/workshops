@@ -1,24 +1,27 @@
 Reasons to use a command line
 -----------------------------
 
-- reproducible
+- Reproducible:
 I can copy-paste commands, put them in a text file, and re-use them later, or send them to someone else. For a GUI (graphical user interface), I'll need to write down exactly what buttons to click, or create a screen-recording.
 
-- scripting / automating
-(closely related to the previous point)
+- Scripting / automating (closely related to the previous point):
 I can write a shell script (a series of commands in a file) and execute it, which will be faster than manually clicking some buttons several times. GUIs are much harder to automate than a series of shell commands
 
-- less data traffic
-(More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2millions pixels with 3 byte color pixels streamed every 1/30 of a second or so.
+- Less data traffic:
+(More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2 million pixels with 3 byte color pixels streamed every 1/30 of a second or so.
 
-- faster (touch typist only perhaps): moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command.
+- Faster (touch typist only perhaps):
+Moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command.
 
-- often more versatile. I can filter out a list of files with
+- Often more versatile:
+I can filter out a list of files with
 
 `ls data-202506??-cluster[ABC].txt`
 
 to get all files for clusters A, B and C produced in June 2025, than I can through a file browser.
 
+Terminology
+-----------
 
 - Terminal: application which gives you access to a command line & shell
 
@@ -26,13 +29,13 @@ Terminals were single monitors with a keyboard, connected to a (large) computer 
 
 - Command line: the line where you enter commands. Very straightforward name.
 
-- Prompt: the (textual) indicator bit before the point where you enter commands. Can have things like a (parth of) a path, user name, computer name, time; most often ends with a $ (for bash shell) or % (for z-shell); when it ends with a #, this means you are acting as the root user (beware!). This is all configurable, and some programs you run will alter your prompt to indicate some special status.
+- Prompt: the (textual) indicator bit before the point where you enter commands. Can have things like a (part of) a path, user name, computer name, time; most often ends with a $ (for bash shell) or % (for z-shell); when it ends with a #, this means you are acting as the root user (beware!). This is all configurable, and some programs you run will alter your prompt to indicate some special status.
 
 - Shell: The program that initially interprets what you typed on the command line. It provides editing capabilities of commands (try control-a to go to the start of a command, then control-e to go to the end of that line), history (use the up-arrow to see previously typed commands), tab-completion, matching multiple files (called globbing, with * and ?, and sometimes even other globbing options). Once processed by the shell, the command gets send onwards to the actual operating system (OS).
 
 Hence the name "shell": it provides a shell around your commands, before sending things off to the OS.
 
-Various shells exists, the most common in Linux being bash: Bournce Again SHell (once upon a time, there was just "sh", shell; then came the Bournce shell (named after Stephen Bourne, not Jason). The other popular shell is zsh, Z-shell, which is common nowadays on Mac. From the past, you could encounter ksh, csh and tcsh. Generally, try to stick to bash or zsh: they have very similar syntax.
+Various shells exists, the most common in Linux being bash: Bourne Again SHell (once upon a time, there was just "sh", shell; then came the Bourne shell (named after Stephen Bourne, not Jason). The other popular shell is zsh, Z-shell, which is common nowadays on Mac. Though less frequent nowadays, you could encounter ksh, csh and tcsh. Generally, try to stick to bash or zsh: they have very similar syntax.
 
 
 The various terms Terminal, Command line, Prompt and Shell are often intermixed, with essentially the same meaning:
@@ -44,9 +47,10 @@ The various terms Terminal, Command line, Prompt and Shell are often intermixed,
 
 
 
-(Bonus
+(Bonus:
 
 - Cursor: point where you are typing. Since it's all characters, the cursor can't be exactly between characters: the left side of the cursor is often the point where new characters will appear
+
 )
 
 Linux & macOS
@@ -99,20 +103,20 @@ Deleting files & directories
 ----------------------------
 
 
-If you're not entirely sure a file (or multiple, or whole directories), can really be deleted, just rename them, to something obvious, to be deleted later. For example,
+If you're not entirely sure a file (or multiple files, or whole directories), can really be deleted, just rename them, to something obvious, to be deleted later. For example,
 
-mv mydirectory mydirectory_aside
+`mv mydirectory mydirectory_aside`
 
 
-Once you're satisfied everything still works and you really don't need the file (say, after a few days, weeks or a month or so; give it time), you can remove the *_aside directories and files. Sometimes, you may forget about it, and then it only becomes necessary when you run out of disk space.
+Once you're satisfied everything still works and you really don't need the file (say, after a few days, weeks or a month or so; give it time), you can remove the `*_aside` directories and files. Sometimes, you may forget about it, and then it only becomes necessary when you run out of disk space.
 
 This is essentially what dragging something to the Trash does: it has been moved to a different directory.
-I would suggest not to do exactly this, because if you do need the file or directory back, you may not remember in which directory exactly it should go. With _aside, you can just leave it in the right directory (unless of course you have a program that reads all files in that directory, and this particular file should not be read).
+I would suggest not to do exactly this, because if you do need the file or directory back, you may not remember in which directory exactly it should go. With `_aside`, you can just leave it in the right directory (unless of course you have a program that reads all files in that directory, and this particular file should not be read).
 
 
 
 Annoying characters in file names
-------------------------------
+---------------------------------
 
 
 Spaces, quotes (single & double), backslashes and forward slashes, are tricky characters in file names. If you can avoid them, do so.
@@ -120,9 +124,9 @@ Additionally, try and avoid accented characters (this makes it easier for most o
 
 Generally, I'd suggest to use lowercase letters, numbers, underscores and dashes, and a period to separate the filename stem from its extension.
 
-Uppercase letters are not really needed, and appear to be a newer thing (such as directory names in a user directory, like Documents, Desktop and Downloads, whereas system directories are more standard named lowercase: /usr, /bin, /var, /proc etc. There is no need for a capitalised directory name: ls -F or a colored ls output tells you quickly enough what is a directory).
+Uppercase letters are not really needed, and appear to be a newer thing (such as directory names in a user directory, like Documents, Desktop and Downloads, whereas system directories are more standard named lowercase: /usr, /bin, /var, /proc etc. There is no need for a capitalised directory name: `ls -F` or a colored `ls` output tells you quickly enough what is a directory).
 
-dashes are generally fine in filenames, although very occasionally these may be interpreted by some (badly written) program as a minus sign (I've never had a problem though), so if you want to be really safe, use underscores instead.
+Dashes are generally fine in filenames, although very occasionally these may be interpreted by some (badly written) program as a minus sign (I've never had a problem though), so if you want to be really safe, use underscores instead.
 
 If you do encounter filenames with parentheses, slashes, spaces etc, quote them, in either single or double quotes: "Some (annoying) file.txt". Alternatively, escape all special characters with a backslash: Some\ \(annoying\)\ file.txt. If you use tab completion (Som<tab>), the shell will do the latter. Tab-completion is very convenient for such filenames, but the backslashes can make them hard to read.
 
