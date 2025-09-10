@@ -505,6 +505,10 @@ will create an empty file "somefile.txt". If the file already exists, it updates
 
 shows the amount of disk space used and free (disk free). Use the `-h` option to get more human-readable output.
 
+* time <command>
+
+measures the time used for a command. It shows subsecond precision, and usually measures total, but also active (CPU) time.
+
 
 Redirecting output and input
 ----------------------------
