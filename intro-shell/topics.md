@@ -646,6 +646,50 @@ Extras
   By this time, you're almost better off with programming a short Python script or similar.
 
 
+* Permissions
+
+Each file (and directory) has permissions: which user can do what with a file.
+
+The basic permissions are read, write and execute. Programs, including shell scripts, would normally be executable, otherwise you can't run them.
+
+The main use of these permissions are on systems where there are multiple users. This can prevent other users from reading (or writing = modifying!) your files.
+
+There are three levels of permissions: user level (just for yourself), group level (a specific group of users on a single system), and other/world (everyone else). This difference can make it convenient, on multi-user systems, to share files and directories between users belonging to one group.
+
+You see the permissions if you use `ls -l`, in the form of
+
+  -rw-r--r--
+
+For a directory, it would be
+
+  drwxr-xr-x
+
+The `d` at the start obviously indicating this is a directory.
+
+Each group of 3 characters is rwx, or a dash if a value is unset. r means read, w write, and x means executable. A directory should always be executable and readable to be able to read files inside the directory.
+
+The first group is for the user permissions, the second for the group permissions, and the third for the world permissions.
+
+By default on most systems, files will have -rw-r--r-- permissions: read and writeable for the user, readable for their group and the rest of the world.
+
+
+You can change permissions with the `chmod` command. You specify whether this is for a user, group or other (u, g or o; can be combined), then whether you want to add or remove a permission. For example
+
+   chmod go-r personal.txt
+
+Removes the read permission for both group and other/world.
+
+Important to keep in mind is that the directory where a file is located, will also need to be readable for a file to be readable (by that user/group/other). And if you want to modify a file (including changing its permissions), you will need to have write (and execute) permissions for its parent directory. This is usually the default for files in your home directory and its subdirectories.
+
+Sometimes, you'll find guides with just a number for permissions, like 644 or 755. These should be read as three separate octal numbers, 6 4 4, each indicating a combination of execute (0/1), write (0/2) and read (0/4). In the above examples, 644 (or 0644, the leading 0 indicating octal) is the same as rw-r--r--, and 755 is rwxr-xr-x (often the default for directories).
+
+You may occasionally come across a guide or some tip to set your permissions to 777. While this is generally still safe on your own laptop, avoid this: it will set files and directories readable *and writeable* for everyone that has access to the system.
+
+Behind the scenes, permissions are often used to limit what a process can do. Processes sometimes have their own user (not root), and permissions minimize what this user (and thus the process) can read or write.
+
+Finally: the "root" user can override everything. A root user on a shared system can look in your files (but they really shouldn't).
+
+
 * compression (zipping)
 
 compress <file>: compress a file (older algorithm). Extension .Z
