@@ -488,6 +488,24 @@ Handling / searching through multiple files
   * Some shells allow you to expand the the pattern before you run the command, using <tab>: `ls *.py<tab>` may expand to `ls spam.py egg.py bacon.py`.
 
 
+Random useful commands
+----------------------
+
+A few useful commands
+
+* echo "some text"
+
+will write "some text" (without quotes) to the terminal. This is useful in a shell script.
+
+* touch somefile.txt
+
+will create an empty file "somefile.txt". If the file already exists, it updates the timestamp for its last modification to current.
+
+* df
+
+shows the amount of disk space used and free (disk free). Use the `-h` option to get more human-readable output.
+
+
 Redirecting output and input
 ----------------------------
 
