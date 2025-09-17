@@ -2,9 +2,9 @@
 
 
 
-Cluster computing is mainly useful when you have software that can run massively parallel. A single core on a cluster machine is generally slower than on your personal machine, but once you can run hundreds of processes in parallel (not necessarily completely indepent, some exchange between steps is possible and usually essential), a cluster will beat any standard laptop or desktop.
+Cluster computing is mainly useful when you have software that can run massively parallel. A single core on a cluster machine is generally slower than on your personal machine, but once you can run hundreds of processes in parallel (not necessarily completely independent, some exchange between steps is possible and usually essential), a cluster will beat any standard laptop or desktop.
 
-You can distinguish between CPU and GPU clusters (there are so more specific variants as well): CPU clusters are more flexible with regards to computations executed; GPU clusters tend to use more straightforward compuations. GPU clusters often have lower precision as well; there are 64 bit floating point precision (usually required for e.g. astrophysical or climate simulations) GPUs as well, but these can run less processes in parallel. GPUs also tend to overall slower than a CPU, but can handle even more processes (provided memory throughput doesn't become a bottleneck).
+You can distinguish between CPU and GPU clusters (there are so more specific variants as well): CPU clusters are more flexible with regards to computations executed; GPU clusters tend to use more straightforward computations. GPU clusters often have lower precision as well; there are 64 bit floating point precision (usually required for e.g. astrophysical or climate simulations) GPUs as well, but these can run less processes in parallel. GPUs also tend to overall slower than a CPU, but can handle even more processes (provided memory throughput doesn't become a bottleneck).
 
 Here, we'll focus on the basics of running programs on a CPU cluster.
 
@@ -14,7 +14,7 @@ Here, we'll focus on the basics of running programs on a CPU cluster.
 
 Most clusters are accessed over ssh, secure shell access, which allows remote working through a terminal (which is far more efficient, and easier to setup and maintain, than through a graphical user interface).
 
-While you can log in to a remote machine with a username and password, using ssh keys is the standard nowayds: you log in once with a password, copy the key file contents to the other machine in a specific file, and then you can use the key to ssh any next session, without using your password.
+While you can log in to a remote machine with a username and password, using ssh keys is the standard nowadays: you log in once with a password, copy the key file contents to the other machine in a specific file, and then you can use the key to ssh any next session, without using your password.
 
 
 To set up ssh key access  on your own machine, the following steps are needed
@@ -25,7 +25,7 @@ To set up ssh key access  on your own machine, the following steps are needed
 
   If you don't have that directory, make it first: `mkdir ~/.ssh`, then `cd ~/.ssh`.
 
-- Check what's already avaiable with ls`.
+- Check what's already available with ls`.
 
 - If you see files with a `.pub` extension, you are probably already set. This is likely a file like `id_ed25519.pub` or `id_rsa.pub`. There should also then be a matching file without the `.pub` extension.
 
@@ -52,7 +52,7 @@ To set up ssh key access  on your own machine, the following steps are needed
 
 ### Using ssh-agent to handle your ssh-key password
 
-- Check if the `ssh-agent` program is running, with `echo $SSH_AGENT_SOCK`.  `ssh-agent` is a little commandline keychain program that can keep your ssh-key passwords in memory.
+- Check if the `ssh-agent` program is running, with `echo $SSH_AGENT_SOCK`.  `ssh-agent` is a little command line keychain program that can keep your ssh-key passwords in memory.
 
 - If the variable is empty or does not exist, start the `ssh-agent` program, as follows:
 
@@ -86,7 +86,7 @@ host helios
      IdentityFile ~/.ssh/id_ed25519
 ```
 
-  The indentation is important, but it can also be 2 spaces, or even tabs. Justk eep it equal for all fields.
+  The indentation is important, but it can also be 2 spaces, or even tabs. Just keep it equal for all fields.
 
   If you are not using Helios, change the `HostName` to the IP address of the demonstration machine.
 
@@ -126,12 +126,63 @@ drwx--S---+ 49 <user> api-helios-unix-fnwi  124 Sep 15 15:53 ..
 
   Once done, you can log out of Helios, by typing `logout` or pressing `control-d`.
 
-- Back on your local machine, in the `.ssh` directory, also ensure your files are only readable and writeable by (even if you're the only user on the system). In the `~/.ssh/` directory: `chmod 600 config`, `chmod 600 id_ed25519*` and `chmod 700 .`.
+- Back on your local machine, in the `.ssh` directory, also ensure your files are only readable and writable by (even if you're the only user on the system). In the `~/.ssh/` directory: `chmod 600 config`, `chmod 600 id_ed25519*` and `chmod 700 .`.
 
   There may also be a known_hosts file: this is where the special identifier key for Helios is stored. You can also change this file permissions if you want. There is a chance that if Helios gets upgraded (or completely replaced), this key changes, and ssh refuses to connect. The only way out is to edit the `known_hosts` file, remove or comment-out the line for Helios and save the file, ssh into Helios, and accept the new host key. This happens rarely though.
 
 
+## ssh keys versus passwords
+
+Why go through all the above trouble, and you still have to type a password in the end?
+
+One thing is that this password is local to your machine (as is your ssh key), so hopefully it is less easy to accidentally spread around (e.g., type it into a fake website).
+
+Another part is that the ssh key itself is far more secure than any password likely is. So even if you use a very strong password, the ssh key is still far less to crack.
+
+Further, when using ssh with a password, the password gets transmitted over the internet (encrypted though), to be compared to the account you have on the remote machine. Your private ssh key never leaves your machine; the server (which has access to the public key) uses your public key to encrypt a test message, sends it to your local private key, where your private key can decrypt this test message. The result is then sent back (not in plain text), which the server can compare for validation. (More details at https://en.wikibooks.org/wiki/OpenSSH%2FCookbook%2FPublic_Key_Authentication ).
+
+Be warned though, in particular for ssh keys without a password: once someone has access to your machine, in particular to your local account, they can access any other machine that you have access to via ssh keys. Though these days two-factor authentication also starts to appear for ssh connections.
+
+
 ## Copying files across ssh
+
+### scp
+
+To copy files between machines over ssh, use `scp`. With the configuration setup as above, you can use the `helios` alias again.
+
+Copying from your local machine to Helios:
+
+```
+scp myfile.txt helios:
+```
+
+which copies `myfile.txt` into your home directory on Helios. If you had a directory `Documents` on Helios, use `scp myfile.txt helios:Documents`; or use `scp myfile.txt helios:newname.txt` to give it another name. Very similar all to the normal `cp` command.
+
+The other way around is equally obvious: `scp helios:myfile.txt localfile.txt`.
+
+Things are only tricky when you copy multiple files at once, and you use wildcards: the wildcards will be (attempted to be) expand(ed) by your local shell before copying. You need to quote wildcards that you use for files on the remote (Helios) side of things. E.g.
+
+```
+# This works fine
+scp *.txt helios:Documents
+
+# Requires quoting
+scp helios:*.txt .
+```
+
+### rsync
+
+If you are copying multiple files, in particular whole directories and subdirectories, `rsync` may be a better choice: it will keep track of files that are already copied and haven't changed. This is useful if your connection is interrupted mid-way copying, so you only have to copy half the number of files in a next try. It makes it also convenient to copy over only files that have changed locally, for example if you copy a large codebase.
+
+```
+rsync -ave ssh * helios:newdir
+```
+
+will copy all files and subdirectories (`*`) in the current local working directory to a directory `newdir` on Helios. The `-a` option means "archive", which amounts to copy files recursively. The `-v` is simply verbose, so you see what is being copied. The `-e` option is the more important one here, which takes an argument, `ssh` in this case. `-e` means "external program" (external to rsync), so it uses the external ssh program to copy things.
+
+If you execute the above rsync command again, you'll see that nothing is copied anymore: all files on the other side are up to date. If you change one or a few files on your local side (with e.g. `touch <file>` to change the file timestamp), only those files will be copied.
+
+Note: rsync is often used for backing up files.
 
 
 ## Editing files over ssh
@@ -218,7 +269,7 @@ There luckily is `python3.11`, so use that one.
 
 But most software you'll need that is more up to date can be found in "modules". Modules are like packages that set up your environment to use additional or newer tools. They don't really provide a virtual environment, but they will adjust your `PATH` and `LD_LIBRARY_PATH` so that the utilities from loaded modules precede the system utilities.
 
-You can view available modules with 
+You can view available modules with
 
 ```
 module available
@@ -230,7 +281,7 @@ but the subcommands can be abbreviated to the first unique characters:
 module av
 ```
 
-You'll see these are grouped; there is one group of OpenHPC modules (the "ohpc" part). One of the more useful modules in there is the "gnu12" module, which will load the GNU veresion 12 toolset of compilers, and other tools compiled with this toolset. (The default gcc compiler version on the OS is 8.5.) There are also modules for specific astronomy use, with "sw-astro" in their name. Note the various anaconda modules, which provide various Python versions. 
+You'll see these are grouped; there is one group of OpenHPC modules (the "ohpc" part). One of the more useful modules in there is the "gnu12" module, which will load the GNU version 12 toolset of compilers, and other tools compiled with this toolset. (The default gcc compiler version on the OS is 8.5.) There are also modules for specific astronomy use, with "sw-astro" in their name. Note the various anaconda modules, which provide various Python versions.
 
 Each module has a name, and a specific version after the slash. Some modules have identical names, but different versions; one of these will have a "(D)" behind its name: that is the default module that is loaded if you specify just the name, not name and version.
 
@@ -294,7 +345,7 @@ python --version
 
 Warning: be aware that unloading the anaconda module does not get rid of the conda environment. Instead, you will first have to run `conda deactivate`, and then unload or purge the anaconda module.
 
-As to the anaconda modules: I recommended to avoid them, and use the system's Python 3.11 instead, and set up a virtual environment with that Python where you install all the necessary packages. 
+As to the anaconda modules: I recommended to avoid them, and use the system's Python 3.11 instead, and set up a virtual environment with that Python where you install all the necessary packages.
 
 
 Finally, if you are looking for a specific module, you can use the spider command, with the `-r` (recurse) flag and a bit of regular expressions:
@@ -308,7 +359,7 @@ module -r spider '.*mpi.*'
 This will also list any prerequisite module to be loaded first in the chain.
 
 
-More module subcommands can be viewedd with a simple `module help`.
+More module subcommands can be viewed with a simple `module help`.
 
 
 # SLURM: cluster control
@@ -379,7 +430,7 @@ To run it through SLURM, we have to write an sbatch script (a SLURM batch script
 srun bash test1.sh
 ```
 
-Note that this is essentially a bash script, with a special SLURM directive, `#SBATCH`, that passes extra information to SLURM. In this case, we only give it a job name. 
+Note that this is essentially a bash script, with a special SLURM directive, `#SBATCH`, that passes extra information to SLURM. In this case, we only give it a job name.
 
 The last line executes our actual program. The `srun` is strongly advised, and necessary for multithreaded programs: it helps SLURM handle the requirements of your script properly, and also lets SLURM do some bookkeeping afterwards (e.g., how much memory and CPU core time your script has used).
 
@@ -426,6 +477,26 @@ Memory Efficiency: 11.33% of 100.00 MB
 
 This gives us an idea of the CPU usage (we already knew that was 1 core, and little usage), but perhaps more interestingly, the amount of memory required: about 11 MB.
 
+If you want detailed information about a specific, you can use `scontrol`:
+
+```
+scontrol show job -dd 12345
+```
+
+For all your past jobs, you can also use `sstat` instead of `seff`:
+
+```
+ -u $USER
+```
+
+and you can specify the fields you want to see, or show a specific jobid:
+
+```
+sacct -j 12345 --format=JobID,JobName,AllocCPUS,CPUTime,MaxRSS,Elapsed,NCPUS
+```
+
+Use `sstat --helpformat` to show all available fields (or read the man-page).
+
 
 ## Adding extra SBATCH info
 
@@ -464,3 +535,354 @@ If you check `seff <job-id>` afterwards, you'll notice that the memory efficienc
 
 
 
+## Cancelling a job
+
+If you start a job, let it run for a bit, and then notice all kind of errors occurring (this is where having stderr going to a separate output is convenient), you may want to stop the current cluster job, fix the problem, and run it again. Grab the job ID from `squeue`, then simply use `scancel`:
+
+```
+scancel 12345
+```
+
+## Compute-local storage
+
+If your program writes a lot of intermediate data, you'll want to minimize the back and forth between the compute node (where the program is running) and your home directory (which is on the head node) or a data storage node. Every compute node has a local disk attached to it, where it is much faster to write to. Once completely finished, you can transfer the resulting file to your home directory or a proper data directory.
+
+The compute storage node is found on a compute under the `/hddstore`. The best option is to make a (temporary) directory with your username on this `/hddstore`, and write your output in there. Since you can't access the compute nodes and their disks directly from, you'll need to create that directory inside the sbatch job, and then remove it at the end of your run as well.
+
+The actual program now looks as follows (`test2.sh`):
+
+```
+#!/bin/bash
+
+# Produce some standard output
+echo "Starting a test script"
+
+# Produce some standard error
+ls nonexistent.txt
+
+outdir=/hddstore/${USER}
+
+# Do some processing
+for i in {1..10}
+do
+	echo "output $i" > ${outdir}/output-${i}.txt
+	sleep 1
+done
+
+
+# Done!
+echo "Finished"
+```
+
+So that 10 tiny files will be created.
+
+The sbatch script is (`test2.sbatch`):
+
+```
+#!/bin/bash
+
+mkdir -p $HOME/output
+
+#SBATCH --job-name test1
+
+# Use the short partition.
+#SBATCH --partition short
+
+# Explicitly request only one node
+#SBATCH -N 1
+# If you set the above, use --tasks-per-node to be explicit
+# about the number of cores/threads you want
+#SBATCH --tasks-per-node 1
+
+# Separate stderr and stdout. %j is the job ID
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.err
+
+# Limit the amount of memory
+#SBATCH --mem 20MB
+
+# Maximum allowed time (in case your program may get stuck)
+#SBATCH --time 00:00:30
+
+# Make a temporary output directory on /hddstore
+outdir=/hddstore/${USER}
+
+mkdir -p $outdir
+
+srun bash test2.sh
+
+srun cp ${outdir}/* ${HOME}/output/
+
+# Clean up the output directory
+rm -r ${outdir}
+```
+
+Note that the `mkdir` and `rm` commands are not preceded by `srun`: these are very short (hopefully) one-off commands. The `cp` is command is, since this may take a bit longer, so it's handy to let SLURM know you're running this process. Better is probably to use `rsync`.
+
+Your home directory is always visible, so you can use $HOME from anywhere.
+
+
+If you have input data, you simply run the `cp` command before running your program, from your home or a data storage node to the `/hddstore` directory on the compute node.
+
+Be aware that the the storage on the compute nodes is limited, a few TB at most. If you need more, you'll have to put a cp / mv command in your actual program, to move data around. But this will slow down your overall program; it is really dependent on the task at hand. The best is to talk to your local cluster maintainer what the best option is.
+
+For faster write (and read) on a compute node, there is also an `/ssdstore` directory. This is much smaller, a few hundred GB at most. If you decide to use that, be very aware of your file sizes, and clean up afterwards.
+
+
+## Cleaning up for failed commands
+
+If your process crashes midway, you may still want to retrieve all intermediate data files, and clean up the temporary storage directory on the compute node. But your script has already failed, so how do you do that?
+
+Note that this situation refers to cases where SLURM cancels your sbatch job. In our example script, the `cp` command is run independently from the shell script, so if the shell script, crashes, the `cp` command still proceeds.
+
+
+You can use create a cleanup function, and then use the bash `trap` command to run that when a script ends, even if it is canceled: the trap function will always run. With that, your sbatch script can look like this now:
+
+```
+#!/bin/bash
+
+#SBATCH --job-name=test2c
+
+# Use the short partition.
+#SBATCH --partition=short
+
+# Explicitly request only one node
+#SBATCH -N 1
+# If you set the above, use --tasks-per-node to be explicit
+# about the number of cores/threads you want
+#SBATCH --tasks-per-node=1
+
+# Separate stderr and stdout. %j is the job ID
+#SBATCH -o slurm-%j.out
+#SBATCH -e slurm-%j.err
+
+# Limit the amount of memory
+#SBATCH --mem=20MB
+
+# Maximum allowed time (in case your program may get stuck)
+#SBATCH --time=00:00:30
+
+
+# Make a temporary output directory on /hddstore
+outdir=/hddstore/${USER}
+
+
+function cleanup {
+	# Copy any output files to home and remove the temporary directory
+	mkdir -p $HOME/output
+	cp ${outdir}/* ${HOME}/output/
+	rm -rf ${outdir}
+	exit
+}
+
+# Run cleanup on exit
+# Needs to be set *before* starting our actual job
+trap 'cleanup' EXIT
+
+mkdir -p $outdir
+
+srun bash test2.sh
+```
+
+
+## Running parallel processes
+
+Things get more interesting when running parallel processes.
+
+There are two variants of parallel processes
+
+- embarrassingly parallel: a program has a loop where each iteration is independent of each other. It is very easy (embarrassingly so) to parallelize this. The loop can be small, for a straightforward summation loop, or large, where there are simply a number of independent processes: think Monte Carlo processes.
+
+  Many other programs and algorithms can often be written in such a way, or parts of it, so speed things up.
+
+  Embarrassingly parallel programs are often good programs to run on a GPU. Though this will be depend on memory consumption, throughput and precision required.
+
+  Python multiprocessing module can be used in this category (using e.g. `Pool.map`), or OpenMP (OMP; for compiled programs).
+
+- "Step-wise" parallel (not a standard term): programs that run steps independent, then communicate with each other to exchange their results, then proceed to the next step. This is the prototype parallel example of simulations with cells, where each cell performs a computation, after which it has to exchange the results with its neighbours. MPI, Message Passing Interface, is the library used in this context.
+
+Note: don't mix up OpenMP (parallelizing loops) and MPI. The latter handles communication between different programs, even if those different programs are often the same code. Programs can even use both: OpenMP to perform a computation in a cell, and MPI to exchange the results with their neighbour cells (i.e., programs). MPI programs are often more complicated to set up, since you need to know what program corresponds to which cell and neighbour, you likely need ghost cells, and you'll want to try to minimize the communication overhead.
+
+In the example below, we'll use Python multiprocessing for a very simple Monte Carlo computation of PI: we calculate the percentage of random points in a square falling inside a circle. We do that multiple times in different processes and then calculate the average.
+
+Note that in this particular example, we could submit multiple one-core jobs and average the results at the end; or even let a shell script start multiple Python programs. Everything here is done within a single Python program, because often, the parallel part is midway a program, and only parts of the program run in parallel.
+
+The program itself can be found in the scripts directory (it is too long to list here). You can first test the program on your local machine: run it for a few processes; if you have a slow machine, pass a lower number of trials, e.g. `--ntrials=1_000_000`  (note: the `1_000_000` works because Python accepts this; other programs may not accept this notation).
+
+
+The sbatch script has now a new directive, `cpus-per-tasks`:
+
+```
+#SBATCH --cpus-per-task=$NPAR
+```
+
+This is the number of (parallel) processes that a task uses. This corresponds to the number of OpenMP threads or multiprocesing threads; these should match! For this, we can use the `SLURM_CPUS_PER_TASK` environment variable, as in the example: the first (mandatory) argument of our `mc-pi.py` test program requires the number of threads to run.
+
+Note: in Python, be aware that the nor threading module, neither the asyncio module, are actually using multiple cores. These modules just allow a program to switch between different processes on a single code. Only multiprocessing is really multithreaded, but comes with a bit of (startup) overhead, so don't use it for very short processes. (In the future, this may change a bit, since there are experiments to allow multithreading directly in Python. But this will then be through a new module).
+
+
+## MPI
+
+MPI, the Message Passing Interface, is a protocol to quickly send (binary) data between independent programs. In particular on a cluster, there can be optimized network connections between different nodes (which will be the slowest connections, compared to node-internal connections, like between CPU cores); likewise, optimized MPI libraries may exist for the cluster you are using. See if you can find any documentation on this.
+
+On Helios, we have openMPI4, a submodule of the gnu12 module. We'll be using these modules, and then use mpi4py for convenience, but with the system Python 3.11, and install mpi4py ourselves. This way, the mpi4py package should match the openMPI4 library. If we had used Conda, it is likely Conda would have provided both an mpi4py package and an openMPI4 library that are rather generic, and not optimized for Helios. Perhaps the difference is minimal, but for long running calculations, these things start to add up.
+
+First, load the two modules (purge any potentially loaded modules):
+
+```
+module load gnu12
+module load openmpi4
+```
+
+You can check that you have OpenMPI now ready, and see where it is installed, with
+
+```
+mpicc --showme
+```
+
+Now create a Python virtual environment:
+
+```
+python3.11 -m venv venv
+```
+
+and activate it
+
+```
+source venv/bin/activate
+```
+
+You can check if everything looks good with
+
+```
+which python
+which pip
+python --version
+pip --version
+```
+
+Now install `mpi4py`. But there is a cache: the package likely brings its own MPI (mpich) libraries with it (like Conda). So it's not using the system libraries. You can see this if you install the package and see something like
+
+> Downloading mpi4py-4.1.0-cp311-cp311-manylinux1_x86_64.manylinux_2_5_x86_64.whl
+
+Note the "manylinux" part. And if you check the `venv/lib/python3.11/site-packages/mpi4py/` directory, you see two `MPI.*-linux-gnu.so` libraries.
+
+So we should go for the challenge of installing and compiling mpi4py ourselves, so that it uses our system Python. This would be:
+
+```
+pip install --no-binary :all:  mpi4py
+```
+
+This may take a while.
+
+Since this build takes a while, we'll be cheating for the workshop, and simply install the prefab package instead. So don't use the `--no-binary :all:` for this one off time, and just run
+
+```
+pip install mpi4py
+```
+
+Also install NumPy, for the demonstration program:
+
+```
+pip install numpy
+```
+
+Now we can try out our test script, taken directly from the mpi4py introduction documentation (there are a few extra lines to show which MPI process is running): `test-mpi4.py`.
+
+More important is the corresponding sbatch script, `test-mpi4.sbatch`. Below are the important lines:
+
+```
+# Our program uses two MPI "tasks" (cf ranks)
+#SBATCH --ntasks=2
+
+# Number of "CPUs" (cores/threads) per task
+#SBATCH --cpus-per-task 1
+
+
+function cleanup {
+	deactivate
+	module purge
+	exit
+}
+
+# Run cleanup on exit
+# Needs to be set *before* starting our actual job
+trap 'cleanup' EXIT
+
+# Set up our environment
+module load gnu12
+module load openmpi4
+
+source $HOME/venv/bin/activate
+
+
+mpirun -np $SLURM_NTASKS python test-mpi4.py
+
+# The line below may work on a properly configured cluster
+# But don't use srun and mpirun together!
+#srun python test-mpi4.py
+```
+
+Note how the environment is set up before we run the script.
+
+We run the script with `mpirun -np`: normally, you would use `srun`, but here, this won't work. This is cluster-configuration dependent, so you may have to inquire how to best run MPI programs. Sometimes, `srun` with a special works.
+
+
+To top it off, we can combine the two: MPI and parallel (Python's multiprocessing, or OpenMP). Use the script `test-mpi4-mc.py` for this, and the `test-mpi4-mc.sbatch` sbatch script. The important addition, other than the last line change, is that we now have
+
+```
+# Our program uses two MPI "tasks" (cf tanks)
+#SBATCH --ntasks=3
+
+# Number of "CPUs" (cores/threads) per task
+#SBATCH --cpus-per-task 2
+```
+
+So there will be three MPI tasks that communicate with each other, and each of these tasks runs its Monte Carlo simulation in parallel on 2 cores. So a total of 6 cores (or processes, rather) are being used.
+
+
+## Multiple nodes
+
+There is another thing we didn't touch upon: we left the number of nodes at 1. And on the "short" partition, there is only one node. Change the partition to "all", and you can increase the number of nodes, say to 2.
+
+But, you only want to do that if you need more cores than those on a single node (48). The reason is that communication on a single node is much faster than that across nodes. Also, using OpenMP or multiprocessing only works on a single core; only MPI processes can communicate across core boundaries.
+
+But, there is another trade-off: the memory per node is limited (256 GB), and all processes on the node have to share that memory. So if you have memory intensive processes, you may need to limit yourself to a lower number of cores per node. For that, there is a SLURM directive as well (naturally):
+
+```
+#SBATCH --tasks-per-node=12
+```
+
+This not only helps for your memory usage per node. If each of these tasks runs 4 processes in parallel (perhaps not continuously, but for some short loops), then you'd have 12 x 4 = 48 cores potentially being busy at times. If you had more tasks running on a node, they would have to wait for each other to run their 4-process-parallel task. (This ignores any hyperthreading, but as mentioned, an intensive computation can't make use of hyperthreading, and uses a single core 100%.)
+
+So keep this in your mind if you ever use programs that use, for example, both MPI and OpenMP. This is not entirely uncommon, although many programs are MPI-only, or OpenMP-only.
+
+
+## Job arrays
+
+(No example scripts here, sorry)
+
+If you have a program that needs to be run many times, with just slightly different inputs, you can use SLURM job arrays.
+
+You use the following directive:
+
+```
+#SBATCH --array=1-100%10
+``
+
+which will run 100 jobs (with subIDs from 1 to 100), 10 at the time.
+
+The resources you set should apply to a single job (number of cores, runtime, memory usage).
+
+For each task, there will be a special env-var `SLURM_ARRAY_TASK_ID`, which you can then use in your own code to retrieve specific input files, or set specific parameters.
+
+For example, if you distribute your input files over a set of subdirectories named `1` to `100` (`mkdir {1..100}` does that in bash ans zsh; or use `mkdir $(seq 1 100)` if that is more familiar to you). Then at the bottom of your sbatch script, you can have something like
+
+```
+cd $SLURM_ARRAY_TASK_ID
+srun myprogram
+```
+
+(Use an absolute path if you want to avoid confusion.)
+
+Remember, if you have files that your program reads often, it may be preferable to copy these first to the local compute node storage. (In which case your path becomes something like `cd /hddstore/${USER}/$SLURM_ARRAY_TASK_ID`).
