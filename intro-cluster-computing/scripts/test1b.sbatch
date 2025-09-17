@@ -6,10 +6,9 @@
 #SBATCH --partition short
 
 # Explicitly request only one node
-#SBATCH -N 1
-# If you set the above, use --tasks-per-node to be explicit
-# about the number of cores/threads you want
-#SBATCH --tasks-per-node 1
+#SBATCH --nodes 1
+# We only want to run one tasks, i.e., program
+#SBATCH --tasks 1
 
 # Separate stderr and stdout. %j is the job ID
 #SBATCH -o slurm-%j.out
