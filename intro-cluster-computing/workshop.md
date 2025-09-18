@@ -52,7 +52,7 @@ To set up ssh key access  on your own machine, the following steps are needed
 
 ### Using ssh-agent to handle your ssh-key password
 
-- Check if the `ssh-agent` program is running, with `echo $SSH_AGENT_SOCK`.  `ssh-agent` is a little command line keychain program that can keep your ssh-key passwords in memory.
+- Check if the `ssh-agent` program is running, with `echo $SSH_AUTH_SOCK`.  `ssh-agent` is a little command line keychain program that can keep your ssh-key passwords in memory.
 
 - If the variable is empty or does not exist, start the `ssh-agent` program, as follows:
 
@@ -770,7 +770,7 @@ Note the "manylinux" part. And if you check the `venv/lib/python3.11/site-packag
 So we should go for the challenge of installing and compiling mpi4py ourselves, so that it uses our system Python. This would be:
 
 ```
-pip install --no-binary :all:  mpi4py
+pip install --no-binary mpi4py  mpi4py
 ```
 
 This may take a while.
@@ -787,9 +787,9 @@ Also install NumPy, for the demonstration program:
 pip install numpy
 ```
 
-Now we can try out our test script, taken directly from the mpi4py introduction documentation (there are a few extra lines to show which MPI process is running): `test-mpi4.py`.
+Now we can try out our test script, taken directly from the mpi4py introduction documentation (there are a few extra lines to show which MPI process is running): `test-mpi.py`.
 
-More important is the corresponding sbatch script, `test-mpi4.sbatch`. Below are the important lines:
+More important is the corresponding sbatch script, `test-mpi.sbatch`. Below are the important lines:
 
 ```
 # Our program uses two MPI "tasks" (cf ranks)
@@ -816,19 +816,29 @@ module load openmpi4
 source $HOME/venv/bin/activate
 
 
-mpirun -np $SLURM_NTASKS python test-mpi4.py
+mpirun python test-mpi.py
 
 # The line below may work on a properly configured cluster
 # But don't use srun and mpirun together!
-#srun python test-mpi4.py
+#srun python test-mpi.py
 ```
 
 Note how the environment is set up before we run the script.
 
-We run the script with `mpirun -np`: normally, you would use `srun`, but here, this won't work. This is cluster-configuration dependent, so you may have to inquire how to best run MPI programs. Sometimes, `srun` with a special works.
+We run the script with `mpirun`: normally, you would use `srun`, but the recommended way (from the OpenMPI documentation) is to use `mpirun` directly instead of `srun`, provided you use `mpirun` inside an sbatch script. Moreover, you don't need the `-n` (or `-np`) option: `mpirun` will automatically use the nunmber of tasks set in the sbatch script.
 
+If you want to use `srun`, on Helios, it can be used as follows:
 
-To top it off, we can combine the two: MPI and parallel (Python's multiprocessing, or OpenMP). Use the script `test-mpi4-mc.py` for this, and the `test-mpi4-mc.sbatch` sbatch script. The important addition, other than the last line change, is that we now have
+```
+srun --mpi=pmix_v4 python test-mpi.py
+```
+
+But `srun` here would be used directly in the shell or a shell script, not through an sbatch script.
+
+Some details on the `--mpi` flag can be found at https://docs.open-mpi.org/en/v5.0.x/launching-apps/slurm.html#using-slurm-s-direct-launch-functionality
+(Don't confuse the flag with some option values: the flag is "mpi", some options start with "mpi". It's more fun if you run this on a cluster at MPI.)
+
+To top it off, we can combine the two: MPI and parallel (Python's multiprocessing, or OpenMP). Use the script `test-mpi-mc.py` for this, and the `test-mpi-mc.sbatch` sbatch script. The important addition, other than the last line change, is that we now have
 
 ```
 # Our program uses two MPI "tasks" (cf tanks)
@@ -840,6 +850,25 @@ To top it off, we can combine the two: MPI and parallel (Python's multiprocessin
 
 So there will be three MPI tasks that communicate with each other, and each of these tasks runs its Monte Carlo simulation in parallel on 2 cores. So a total of 6 cores (or processes, rather) are being used.
 
+On Helios, you'd run this with
+
+```
+mpirun python test-mpi-mc.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000
+```
+
+An `srun` variant could be
+
+```
+srun --mpi=pmix_v4 -N 1 -n 3 -c 4 python test-mpi-mc.py 4 --ntrials=1_000_000
+```
+
+running on one node (`-N 1`) using 3 tasks (`-n 3`) and 4 processes (CPUs) per task (`-c 4`). The 4 needs to separately provided as argument to the Python script, since `SLURM_CPUS_PER_TASK` is not available outside of an sbatch script (but you could set your own environment variable for this).
+
+You may see some warnings in the output. In that case, you can set the following OpenMPI flag before the srun command:
+
+```
+export OMPI_MCA_btl="^ofi"
+```
 
 ## Multiple nodes
 

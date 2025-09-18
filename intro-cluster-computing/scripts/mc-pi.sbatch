@@ -37,4 +37,4 @@ trap 'cleanup' EXIT
 #export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 # Special SLURM variable
-srun python3.11 mc-pi.py $SLURM_CPUS_PER_TASK --ntrials=100000000
+srun python3.11 mc-pi.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000
