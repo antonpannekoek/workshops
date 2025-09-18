@@ -43,7 +43,15 @@ source $HOME/venv/bin/activate
 # The following would be essential for OpenMP parallel programs!
 #export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
+# If you are seeing warnings about a failed fork init in your output,
+# uncomment out the line below. This will be specific to Helios,
+# and sets a specific OpenMPI environment variable
+#export OMPI_MCA_btl="^ofi"
 
-#mpirun -np $SLURM_NTASKS python test-mpi-mc.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000
-export OMPI_MCA_btl="^ofi"
-srun --mpi=pmix_v4  python test-mpi-mc.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000
+
+mpirun python test-mpi-mc.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000
+
+
+# If you wanted to use `srun` instead, you can use
+# The OpenMPI documentation recommends using mpirun (within an sbatch script)
+#srun --mpi=pmix_v4  python test-mpi-mc.py $SLURM_CPUS_PER_TASK --ntrials=1_000_000

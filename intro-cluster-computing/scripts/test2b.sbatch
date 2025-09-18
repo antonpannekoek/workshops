@@ -24,15 +24,19 @@
 # Make a temporary output directory on /hddstore
 outdir=/hddstore/${USER}
 
+
+function cleanup {
+	# Copy any output files to home and remove the temporary directory
+	mkdir -p $HOME/output
+	cp ${outdir}/* ${HOME}/output/
+	rm -rf ${outdir}
+	exit
+}
+
+# Run cleanup on exit
+# Needs to be set *before* starting our actual job
+trap 'cleanup' EXIT
+
 mkdir -p $outdir
 
 srun bash test2.sh
-
-# Ensure a local output directory to copy to
-mkdir -p $HOME/output
-
-# Copy files
-srun cp ${outdir}/* ${HOME}/output/
-
-# Clean up the output directory
-rm -r ${outdir}

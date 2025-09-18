@@ -40,5 +40,12 @@ module load openmpi4
 source $HOME/venv/bin/activate
 
 
-#mpirun -np $SLURM_NTASKS python test-mpi.py
-srun --mpi=pmix_v4 python test-mpi.py
+# mpirun inside an sbatch script
+# gets its information, number of processes,
+# from the --ntasks directive
+# So we don't need to provide a `-n` (or `-np`) option to mpirun
+mpirun python test-mpi.py
+
+# If you wanted to use `srun` instead, you can use
+# The OpenMPI documentation recommends using mpirun (within an sbatch script)
+#srun --mpi=pmix_v4 python test-mpi.py
