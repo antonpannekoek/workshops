@@ -9,6 +9,9 @@ You can distinguish between CPU and GPU clusters (there are so more specific var
 Here, we'll focus on the basics of running programs on a CPU cluster.
 
 
+NB: there is also an introduction to the Helios cluster, which has been around for as long as Helios and gets updated with any changes, at the API wiki (https://amsuni.sharepoint.com/sites/FNWI_ORG_API_Wiki ) -> Computing -> Helios.
+
+
 ## Setting up ssh
 
 
@@ -67,6 +70,7 @@ eval "$(ssh-agent -s)"
 ```
 if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval `ssh-agent -s`
+  ssh-add
 fi
 ```
 
