@@ -1,23 +1,26 @@
-Why shell / command line?
--------------------------
+Introduction to the Linux shell
+===============================
 
-  * reproducible
+Why use the shell / command line?
+---------------------------------
 
-    I can copy-paste commands, put them in a text file, and re-use them later, or send them to someone else. For a GUI (graphical user interface), I'll need to write down exactly what buttons to click, or create a screen-recording.
+* reproducible
 
-  * scripting / automating  (closely related to the previous point)
+  I can copy-paste commands, put them in a text file, and re-use them later, or send them to someone else. For a GUI (graphical user interface), I'll need to write down exactly what buttons to click, or create a screen-recording.
 
-    I can write a shell script (a series of commands in a file) and execute it, which will be faster than manually clicking some buttons several times. GUIs are much harder to automate than a series of shell commands
+* scripting / automating  (closely related to the previous point)
 
-  * less data traffic
+  I can write a shell script (a series of commands in a file) and execute it, which will be faster than manually clicking some buttons several times. GUIs are much harder to automate than a series of shell commands
 
-    (More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2millions pixels with 3 byte color pixels streamed every 1/30 of a second or so.
+* less data traffic
 
-  * faster (touch typist only perhaps): moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command (exception: touch screen, provided it is flat on the table, i.e. a table).
+  (More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2millions pixels with 3 byte color pixels streamed every 1/30 of a second or so.
 
-  * often more versatile.
+* faster (touch typist only perhaps): moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command (exception: touch screen, provided it is flat on the table, i.e. a table).
 
-   I can filter out a list of files with `ls data-202506??-cluster[ABC].txt` to get all files for clusters A, B and C produced in June 2025, than I can through a file browser (may depend on alphabetical ordering of such filenames).
+* often more versatile.
+
+ I can filter out a list of files with `ls data-202506??-cluster[ABC].txt` to get all files for clusters A, B and C produced in June 2025, than I can through a file browser (may depend on alphabetical ordering of such filenames).
 
 
 * What are a terminal, command line, prompt, shell
