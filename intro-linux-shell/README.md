@@ -25,8 +25,7 @@ Setup
 
 You'll need a terminal program. If you are on Linux or macOS, there is one already installed. On macOS, this is the Terminal application. On Linux, this depends on your flavour of Linux and desktop, but its icon will probably look like a black square, and its name probably contains "terminal" (exception: the Konsole program). On Linux, the keyboard combination control-alt-t will often start a terminal
 
-Windows
-^^^^^^^
+### Windows
 
 On Windows, there is a default terminal, but that is not a Unix-like terminal, so avoid this. The best solution to use a Linux-style terminal that I'm aware of, is to install two programs:
 
@@ -647,8 +646,7 @@ There are multiple (related) uses of the term "root" in Unix:
 
 - the root user is the super user, or administrative user, on a system. It is an actual user account called "root", and its home directory is at `/root` on Linux, and `/var/root` on macOS. You don't really want to use those directories, and rarely use the root account.
 
-sudo
-^^^^
+### sudo
 
 The root user can do anything on your system. If you are on a single-user system, you can login to the root account, likely with your normal or your admin password (depending on how you set up your system), but you want to avoid that: it is too easy to make a mistake as root that destroys part of your OS.
 
@@ -1115,7 +1113,7 @@ Finally: the "root" user can override everything. A root user on a shared system
 * `htop` is nicer a top (`q` or `ctrl-c` to quit). If it's not installed on your system, your package manager probably has it (for Linux); on macOS, I like to use Homebrew as a package manager for extra Unix tools such as `htop`.
 
 
-  If you want to see it in action, download https://github.com/antonpannekoek/workshops/blob/main/intro-shell/data/par.py and run it with multiple processes: `python par.py 6`. It performs a very simple Monte Carlo simulation to calculate the area of various circles, each in parallel, and you should see the CPU usage go up, as well as multiple threads being active.
+  If you want to see it in action, download https://raw.githubusercontent.com/antonpannekoek/workshops/refs/heads/main/intro-linux-shell/data/par.py and run it with multiple processes: `python par.py 6`. It performs a very simple Monte Carlo simulation to calculate the area of various circles, each in parallel, and you should see the CPU usage go up, as well as multiple threads being active.
 
 ### Letting a process run while quitting the terminal / logging out of the shell
 
