@@ -171,6 +171,7 @@ NB: "directory" tends to be the Unix term; folder is often used with file browse
 
 * Your home directory is probably something like `/home/<username>` on Linux, and `/Users/<username>` on macOS.
 
+* A side note on `mkdir`: it can create only one level of a directory; if you want to create a directory and one or more subdirectories in one go, use the `-p` option, for example: `mkdir -p somedir/subdir/subsubdir`. Also, `mkdir` will give an error when you try to create a directory that already exists; the `-p` option will also ignore any existing directories, that is, not give an error. This is why you'll often see mkdir with the `-p` option.
 
 Some differences between Linux and macOS
 ----------------------------------------
