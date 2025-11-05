@@ -394,7 +394,7 @@ The command `tail -n+5 exoplanets.csv` (with the explicit `+`) shows all lines *
 
   Keys to use while in pager mode:
 
-  - Use the space bar to page down, `w` to go up, `/<keyword>` to search, `n` to go through search results one by one.
+  - Use the space bar to page down, `w` to go up, `/<keyword>` to search, `n` to go through search results one by one (and `shift-n` to go to previous search results).
 
   - Press `q` to quit.
 
@@ -1252,3 +1252,47 @@ You can start a process as normal, but redirect stdout and stderr. Once you have
 
 
 As a final note on this topic: processes will keep running, whether you exit the terminal, close a remote connection if you're logged into another machine, or log out from your desktop environment. If you put your machine to sleep (suspend), common on laptops, the process will also be suspended until the laptop wakes up. And if you shut down or reboot the machine, the process will be killed, and *not* automatically restart (doing that is a whole other topic again).
+
+
+### Man pages
+
+Linux (Unix) man (manual) pages are at the bottom here, but are actually rather important. These serve as the actual reference manual for installed commands. They originate from the time when the internet, with manuals, Q&A sites and LLMs wasn't widely available, and you wanted to look up details about a specifi command. And they still allow you to do that, which is particularly convenient when a program's behaviour has changed between versions and your result from an internet search refers to another version of the program.
+
+Man pages can, however, be a bit cumbersome to read through: they have all the details, and at times more. One nice thing is that they will often also have examples near the bottom of the manual.
+
+A man page for a specific program, or command, can be accessed with
+
+```
+man ls
+```
+
+It uses the default pager, likely `less`, so the usual keyboard shortcuts work: space bar (or page down) to page down, `w` to go up (or page up), `/` to search, `n` and `shift-n` to go to the next or previous search result, and `q` to quit.
+
+A man page follows a standard layout, with sections in a specific order. Not all sections may be present. The "EXAMPLES" section was already mentioned; "SEE ALSO" can also be useful for finding related commands.
+
+Some commands are shell built-ins: these are not standalone commands, because it is more convenient (for the user) to have them be integrated into your shell. To find these man pages, you'll have to do a bit more effort:
+
+```
+man bash-builtins
+```
+
+or
+
+```
+man zshbuiltins
+```
+
+depending on your shell. Then, search for the specific command with `/`, e.g. type `/cd` to find details about the `cd` command.
+
+If you don't know if a specific command exist for some task, you can (other than searching the internet / asking an LLM) try a search for a keyword within all man pages:
+
+```
+man -k time
+```
+
+shows all commands (and more) related to "time".
+
+There are also "sections" of man pages, with sometimes means you need to preceed the command argument with a number argument to get the right section: `man 1 sleep` is different than `man 3 sleep`: the first is for the shell command, the second for the C sleep function.
+
+
+Finally, if you enjoy a bit of nerd jokes and easter eggs in software, have a read through the question and answer at https://unix.stackexchange.com/questions/405783/why-does-man-print-gimme-gimme-gimme-at-0030 .
