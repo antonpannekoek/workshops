@@ -1,13 +1,13 @@
 Introduction to the Linux shell
 ===============================
 
-Note: this is a first version, and there may be all kinds of errors. Hopefully nothing to disastrous (a bad `rm` command would be), but typos or inconsistencies may appear here and there. Please let me know if you spot any mistakes.
+Note: this is a first version, and there may be all kinds of errors. Hopefully nothing too disastrous (a bad `rm` command would be), but typos or inconsistencies may appear here and there. Please let me know if you spot any mistakes.
 
 
 Notation and terminology in this document
 -----------------------------------------
 
-Text between back-quotes, `like this`, are commands you have to type, or output from the shell. This may not always done; context should indicate what it is. (Note: the back-quotes may not show, if the text is rendered through e.g. Markdown. But the style of the text will change.
+Text between back-quotes, `like this`, are commands you have to type, or output from the shell. This may not always be done; context should indicate what it is. (Note: the back-quotes may not show, if the text is rendered through e.g. Markdown. But the style of the text will change.
 
 Items that should be filled in with an appropriate value, such as a suitable file name, are surrounding by angled brackets, `<like so>`, or `<filename>`; it may also indicate a special key, e.g. `<tab>` or `<control>`. If the value is optional, it may be surrounded by square brackets, `[like this]`.
 
@@ -15,7 +15,7 @@ Items that should be filled in with an appropriate value, such as a suitable fil
 
 - GUI: graphical user interface
 
-- Unix (plural: Unices): the operating system after which Linux modelled, with roots in the late '60s and early '70s. Multiple variants of Unix existed in the '80s and '90s, but Linux popularity has pushed most of those away. macOS derives from a Unix variant called BSD (Berkely Software Distribution), which in itself has several variants (freeBSD, openBSD, netBSD, among others). BSD and macOS are closely related to Linux, but differ in some way.
+- Unix (plural: Unices): the operating system after which Linux is modelled, with roots in the late '60s and early '70s. Multiple variants of Unix existed in the '80s and '90s, but Linux popularity has pushed most of those away. macOS derives from a Unix variant called BSD (Berkely Software Distribution), which in itself has several variants (freeBSD, openBSD, netBSD, among others). BSD and macOS are closely related to Linux, but differ in some way.
 
   Unix or Unices is often used to denote Linux and macOS (and others), to distinguish from e.g. Windows or the classic Mac operating systems.
 
@@ -23,7 +23,7 @@ Items that should be filled in with an appropriate value, such as a suitable fil
 Setup
 -----
 
-You'll need a terminal program. If you are on Linux or macOS, there is one already installed. On macOS, this is the Terminal application. On Linux, this depends on your flavour of Linux and desktop, but its icon will probably look like a black square, and its name probably contains "terminal" (exception: the Konsole program). On Linux, the keyboard combination control-alt-t will often start a terminal
+You'll need a terminal program. If you are on Linux or macOS, there is one already installed. On macOS, this is the Terminal application. On Linux, this depends on your flavour of Linux and desktop, but its icon will probably look like a black square, and its name probably contains "terminal" (exception: the Konsole program). On Linux, the keyboard combination control-alt-t will often start a terminal.
 
 ### Windows
 
@@ -50,9 +50,9 @@ Why use the shell / command line?
 
 * Less data traffic
 
-  (More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2millions pixels with 3 byte color pixels streamed every 1/30 of a second or so.
+  (More and more a thing of the past). If you have to work remotely, from your laptop on a different machine across the internet, that other machine may not have a matching OS for GUI use, and it may be a slow network connection. In the latter case, typing in a shell costs you one byte per character typed, instead of 2 million pixels with 3 byte color pixels streamed every 1/30 of a second or so.
 
-* Faster (touch typist only perhaps): moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command (exception: touch screen, provided it is flat on the table, i.e. a table).
+* Faster (touch typist only perhaps): moving a mouse to click an icon or button is perhaps more intuitive, but harder to aim than typing the respective command (exception: touch screen, provided it is flat on the table, i.e. a tablet).
 
 * Often more versatile.
 
@@ -72,9 +72,9 @@ What are a terminal, command line, prompt, shell?
 
 * Prompt: an indicator that input is expected, and optionally what kind of input. For example, type `echo "hello` without the closing double quote, type neter, and you'll move to the next line with a different prompt, indicating that you are in the middle of a string with an unclosed double quote (in this particular case, if you happen to use Z-shell, or zsh, the prompt may change to `dquote>` to actually indicate that, dquote meaning double quote. In bash, it's likely a simple `>` instead). (If you just typed `echo "hello`, either enter the double quote to finish the command, or use the key combination "control-c" to cancel the command.)
 
-  Prompts can be modified to your likely, with practical information or just for fanciness. Some programs will do this automatically for you, such as when you are using a Python or Conda/Mamba virtual environment: they will show the environment in the prompt name, so that you know what environment you are using. Options also exist, for example, to show the status of a Git repository.
+  Prompts can be modified to your liking, with practical information or just for fanciness. Some programs will do this automatically for you, such as when you are using a Python or Conda/Mamba virtual environment: they will show the environment in the prompt name, so that you know what environment you are using. Options also exist, for example, to show the status of a Git repository.
 
-  For bash, the prompt ends with a `$` sign by default. For zsh, it ends with a `%` by default. If you ever have a prompt ending in a `#`, that would you mean you are using the root account, which is generally *not* what you want(!)
+  For bash, the prompt ends with a `$` sign by default. For zsh, it ends with a `%` by default. If you ever have a prompt ending in a `#`, that would mean you are using the root account, which is generally *not* what you want(!)
 
   We won't dive into prompt customisation in this tutorial.
 
@@ -84,7 +84,7 @@ What are a terminal, command line, prompt, shell?
 
   Shell behaviour can be heavily customised using special files. They are mentioned here, but otherwise not really explored in this tutorial:
 
-  `.bashrc` in your home directory for bash, and similarly `.zshrc` for zsh. Note the leading dot of these files. (The `rc` part may stand for "run commands", or "run control", or even "resource configuration"; I tend to think of the files as the latter.) Some other related ones are `.bash_profile`, `.profile`, or `.zshenv`. You may not have any ot these (you don't need them), but you may come across them. Note that some software may alter your `.bashrc` or `.zshrc` upon installation, to add some configuration of their own, such as the miniconda or micromamba installers. Most of the time, this is done to add a directory to the `PATH` variable; see further below.
+  `.bashrc` in your home directory for bash, and similarly `.zshrc` for zsh. Note the leading dot of these files. (The `rc` part may stand for "run commands", or "run control", or even "resource configuration"; I tend to think of the files as the latter.) Some other related ones are `.bash_profile`, `.profile`, or `.zshenv`. You may not have any of these (you don't need them), but you may come across them. Note that some software may alter your `.bashrc` or `.zshrc` upon installation, to add some configuration of their own, such as the miniconda or micromamba installers. Most of the time, this is done to add a directory to the `PATH` variable; see further below.
 
 * Cursor: where you are typing
 
@@ -98,6 +98,7 @@ What are a terminal, command line, prompt, shell?
   NB: to exit the Python or Julia prompt, you can use the key combination "control-d". But be aware that control-d can *also* exit your shell (if in a bash or zsh) and that may exit your whole terminal session, losing all information you had in that session.
 
 
+To determine which shell you are using, you can look at the prompt, but a better way is to print the `SHELL` environment variable, by typing `printenv SHELL`.
 
 Navigating and paths
 --------------------
@@ -124,7 +125,7 @@ NB: "directory" tends to be the Unix term; folder is often used with file browse
 
 * create a file with nano and add a few lines. Close, and open the same file on the command line: `nano newfile.txt`.
 
-  (There is also an editor called `pico`, though it may not be installed on your system. I don't know of an editor called `micro`.)
+  (There is also an editor called `pico`, though it may not be installed on your system. There is even `micro`, which is even less common (but generally installable through your package manager) but more modern.)
 
 * Path:
 
@@ -163,6 +164,7 @@ NB: "directory" tends to be the Unix term; folder is often used with file browse
   ```
   cd ..
   cd ~
+  cd ~<your-username>
   cd
   ```
 
@@ -171,13 +173,14 @@ NB: "directory" tends to be the Unix term; folder is often used with file browse
 
 * Your home directory is probably something like `/home/<username>` on Linux, and `/Users/<username>` on macOS.
 
+* A side note on `mkdir`: it can create only one level of a directory; if you want to create a directory and one or more subdirectories in one go, use the `-p` option, for example: `mkdir -p somedir/subdir/subsubdir`. Also, `mkdir` will give an error when you try to create a directory that already exists; the `-p` option will also ignore any existing directories, that is, not give an error. This is why you'll often see mkdir with the `-p` option.
 
 Some differences between Linux and macOS
 ----------------------------------------
 
 * be warned: Linux is case sensitive, macOS is case "preserving", Windows is case insensitive.
 
-  * ls may or may be case sensitive for its default sorting. This depends on the so-called "locale"; outside of scope
+  * ls may or may not be case sensitive for its default sorting. This depends on the so-called "locale"; outside of scope
 
   * never rely on sorting of files, unless explicitly done (e.g., with ls -t, or the sort command)
 
@@ -191,7 +194,7 @@ Some differences between Linux and macOS
 
   * While a habit by some, there is no need for directory names to start with a capital. This has become a convention (on Linux and macOS) for directories in your home directory, such as `Documents` and `Downloads`. Of course, don't change the names of these files (other parts of your system may become slightly upset by such changes), but your own directories can be all lowercase, all uppercase or just start with a capital.
 
-  * Historically, important files tend to use all upper case, since that would put them at the top in a listing (a `README` files is a prime example of this, as are `INSTAL` files). There are many (awkward) naming conventions this way.
+  * Historically, important files tend to use all upper case, since that would put them at the top in a listing (a `README` file is a prime example of this, as are `INSTALL` files). There are many (awkward) naming conventions this way.
 
 
 * several commands differ slightly in their usage. Sometimes in their output, often in the optional arguments (option) they can take. This, unfortunately, doesn't make things fully compatible between the two OSes, and a specific command for Linux may not run properly on macOS. It is rare, but does happen.
@@ -250,6 +253,8 @@ Exploring ls and files
 
     Use them, but don't rely on them fully.
 
+    Executable files (that is, programs), don't need a `.exe` or `.bin` extension either, and by default they don't have an extension. This is why the programs are `git` and `python`, not `git.exe` and `python.exe` (nor `ls.exe` or `ls.bin`).
+
 
   - avoid tricky characters (non-alphanumeric, including accented characters).
 
@@ -263,7 +268,7 @@ Exploring ls and files
 Copying, renaming, and moving files
 -----------------------------------
 
-`cp` copies files; `mv` renames files (or moves a file to another directory)
+`cp` copies files; `mv` renames files (or moves a file to another directory). Note that both commands will overwrite the destination file if it already exists, without warning.
 
 ```
 cp newfile.txt data.txt
@@ -345,13 +350,13 @@ which copies the two files up a directory.
     But impractical when deleting 100s of (temporary) files
 
 
-* download a large file
+* download a file
 
-  * curl -O https://github.com/antonpannekoek/workshops/blob/main/intro-linux-shell/data/exoplanets.csv.gz
+  * curl -O https://raw.githubusercontent.com/antonpannekoek/workshops/refs/heads/main/intro-linux-shell/data/exoplanets.csv.gz
 
-  * wget as alternative; but sometimes not installed, while curl nearly always is: `wget https://github.com/antonpannekoek/workshops/blob/main/intro-shell/data/exoplanets.csv.gz` (note: no `-O` flag if you use `wget`).
+  * wget as alternative; but sometimes not installed, while curl nearly always is: `wget https://raw.githubusercontent.com/antonpannekoek/workshops/refs/heads/main/intro-linux-shell/data/exoplanets.csv.gz` (note: no `-O` flag if you use `wget`).
 
-  * The Files is compressed. `.gz` is an alternative to zip. Use `gunzip explanets.csv.gz`. Note g(un)zip only compresses single files: it is not a container for multiple compressed files like zip. (More on compression in the extras at the bottom)
+  * The file is compressed. `.gz` is an alternative to zip. Use `gunzip exoplanets.csv.gz`. Note g(un)zip only compresses single files: it is not a container for multiple compressed files like zip. (More on compression in the extras at the bottom)
 
 
   This is a heavily reduced version of the actual exoplanets table from https://exoplanet.eu ; for example, all error columns have been removed.
@@ -389,7 +394,7 @@ The command `tail -n+5 exoplanets.csv` (with the explicit `+`) shows all lines *
 
   Keys to use while in pager mode:
 
-  - Use the space bar to page down, `w` to go up, `/<keyword>` to search, `n` to go through search results one by one.
+  - Use the space bar to page down, `w` to go up, `/<keyword>` to search, `n` to go through search results one by one (and `shift-n` to go to previous search results).
 
   - Press `q` to quit.
 
@@ -426,7 +431,7 @@ The command `tail -n+5 exoplanets.csv` (with the explicit `+`) shows all lines *
   `file` also tells you if a file is binary (like an image file, a FITS file or a HDF-5 file). You don't really want to use cat, head, or tail for these; or open these in a text editor like `nano`!
 
 
-   If you accidentally do (use `cat` on a binary file`), you'll see a lot of awkward characters. If your terminal ends messed up afterwards, here's a useful follow command (you may have to type it blindly, since the characters would be mixed up):
+   If you accidentally do (use `cat` on a binary file), you'll see a lot of awkward characters. If your terminal ends up messed up afterwards, here's a useful follow command (you may have to type it blindly, since the characters would be mixed up):
 
    `reset`
 
@@ -438,7 +443,7 @@ The command `tail -n+5 exoplanets.csv` (with the explicit `+`) shows all lines *
    alias lls='ls -larth'
 ```
 
-   You can set these in your ~/.bashrc or ~/.zshrc, by simply adding a line like above on its own in one of those files..
+   You can set these in your ~/.bashrc or ~/.zshrc, by simply adding a line like above on its own in one of those files.
 
    More importantly, some OSes / sysadmins have set up default aliases, which can lead to confusion. So, for example, there may be this alias
 
@@ -484,6 +489,7 @@ Some command line editing
 
   This is why copy in the terminal is control-shift-c: control-c is much older shortcut than the copy shortcut, and it interrupts currently running programs, which may not be your intention.
 
+  Sometimes, a stuck program will not even respond to the `control-c` interrupt command. But it may still respond to suspending it with `control-z`. In that case, suspend the program, then use `kill %1` or similar to stop it (more on the `kill` command below).
 
 
 Note: control (the key) is often spelled ctrl, ctl, or even written ^, e.g. ^C (the capital letter just indicates the key, it doesn't require the shift key).
@@ -680,7 +686,7 @@ Handling / searching through multiple files
 
   (as before: prefer renaming the current directory)
 
-  As an anecdote: some installer script by a big company had something similar to  `rm -r *.txt, except that there was an extra space: `rm -r * .txt`. As a bonus, the script worked at root level, wiping whole directories owned by the root (= administrative) user.
+  As a cautionary tale: some installer script by a big company had something similar to  `rm -r *.txt, except that there was an extra space: `rm -r * .txt`. As a bonus, the script worked at root level, wiping whole directories owned by the root (= administrative) user.
 
 
   The `?` in a filename means exactly 1 of any character (not 0).
@@ -703,13 +709,13 @@ Handling / searching through multiple files
   ls file[a-c].txt
 ```
 
-  `**` means the current directory, any sub- or subsub (etc) directory.
+  `**` means the current directory, any sub- or subsub (etc) directory. Whether this works depends on your shell, and whether recursive globbing is enabled: For zsh, it is enabled by default; for bash, you may need to enable it first (add a line `shopt -s globstar` in your `~/.bashrc`, or for a one-off, run `shopt -s globstar` on the command line).
 
 ```
   ls **/*.txt
 ```
 
-   matches any text file in the current directory or any of its subdirectories. (Note: this can be shell dependent, if you happen to have an old version of a shell. Test with `ls` before you use it with e.g. `cp` or `mv`.)
+   matches any text file in the current directory or any of its subdirectories.
 
 
 * globbing works with other commands as well (if it makes sense at least). Find a specific keyword in any text file:
@@ -730,19 +736,27 @@ A few useful commands
 
 * `echo "some text"`
 
-will write "some text" (without quotes) to the terminal. This is useful in a shell script.
+  will write "some text" (without quotes) to the terminal. This is useful in a shell script.
 
 * `touch somefile.txt`
 
-will create an empty file "somefile.txt". If the file already exists, it updates the timestamp for its last modification to current.
+  will create an empty file "somefile.txt". If the file already exists, it updates the timestamp for its last modification to current.
 
 * `df`
 
-shows the amount of disk space used and free (disk free). Use the `-h` option to get more human-readable output.
+  shows the amount of disk space used and free (disk free). Use the `-h` option to get more human-readable output.
+
+* `du`
+
+  shows the disk usage, for this directory and all its subdirectories individually. Use `du -chs` for a (human readable) summary of this directory.
 
 * `time <command>`
 
-measures the time used for a command. It shows subsecond precision, and usually measures total, but also active (CPU) time. Try for example, `time sleep 3`: the CPU time is 0%,b ut the total time is 3 seconds. That is a good thing: it shows that `sleep` is using very few CPU resources while being active.
+  measures the time used for a command. It shows subsecond precision, and usually measures total, but also active (CPU) time. Try for example, `time sleep 3`: the CPU time is 0%, but the total time is 3 seconds. That is a good thing: it shows that `sleep` is using very few CPU resources while being active.
+
+* `clear` (shortcut: `control-l`)
+
+  clears the terminal of current text (you can scroll up to still see it, so it's a bit like an empty page-down).
 
 
 Redirecting output and input
@@ -781,7 +795,7 @@ Redirecting output and input
 
   Unix has the concept of standard input, standard output and standard error. These are "secretly" special files, but refer to input (from the keyboard, basically) or output (to the terminal, mainly). They are usual named stdin, stdout and stderr.
 
-  * stderr is a different output "stream" than stdout. If really wanted, use `2> error.txt` to capture that
+  * stderr is a different output "stream" than stdout. If really needed, use `2> error.txt` to capture that
 
   In part this is a historical artefact, where errors were printed somewhere else than on the terminal. It is still useful today to separate errors from normal output: if you have a program that produces a lot of output, you would redirect that to a file. But you still want to see (e.g. in the terminal) if an error occurs.
 
@@ -854,6 +868,12 @@ The character `|` is called a "pipe" in Unix terms. And you can use it as a verb
 
   Variant: `ls -lh | sort -hk5` . Sorts "human-readable", so file size postfixes are taken into account. Note how `sort` also has a `-h` option, but not for the output but to understand the input as "human readable".
 
+*
+```
+  du -h | sort -h
+```
+
+  lists the amount of space used per subdirectory in the current directory (cumulatively), with human-readable prefixes for sizes. `sort` also can take a `-h` option, to handle such prefixes.
 
 *
   ```
@@ -876,9 +896,20 @@ A potential lack is that the output of various commands is not really standardis
 tail -n+1 exoplanets.csv | cut -d',' -f10 | sort | uniq
 ```
 
-will grab the tenth column (field: `-f`) of the exoplanets.csv file (minus the header), using the comma as a column delimiter (`-d`), sort it (alphabetically) and use `uniq` to remove duplicate lines.
+will grab the tenth column (field: `-f`) of the exoplanets.csv file (minus the header), using the comma as a column delimiter (`-d`), sort it (alphabetically) and use `uniq` to remove consecutive duplicate lines.
 
 You will see that the output is a bit weird. This is because cut doesn't care about CSV fields with double quotes (inside of which a comma isn't a column separator), and as a result, column 10 isn't always column 10. For CSV files, dedicated command line tools or a simple Python program are much better; here, it is merely to demonstrate the use of piping, and potential issues you may run in to.
+
+
+### Command substitution
+
+You may also need the output of one command as an argument (that is, not input, but command line argument) of another command. In that case, you can use command substitution. This requires the command-to-be-substituted ("inner command") to be surrounded by `$()`, e.g. `$(pwd)`. A silly example would be
+
+```
+file $(ls *.txt)
+```
+
+to determine the file type of all .txt files. Of course, these would all be "ASCII text" or "Unicode text", and you would simply use `file *.txt`. Often, command substitution is not necessary, and you can use shell utilities like globbing instead.
 
 
 Environment variables
@@ -902,7 +933,7 @@ Environment variables
 
   export PATH=$PATH:/new/directory
 
-  The `export` is necessary in case you are using subshells (that is, if you use shells cripts); otherwise a variable set in a resource script such as `~/.bashrc` will not be exported to the shell where the script is run. Note that when you assign, you use `PATH` (the actual name), but when you evaluate (read) the envvar, you prefix it with the dollar sign: `$PATH`.
+  The `export` is necessary in case you are using subshells (that is, if you use shell scripts); otherwise a variable set in a resource script such as `~/.bashrc` will not be exported to the shell where the script is run. Note that when you assign, you use `PATH` (the actual name), but when you evaluate (read) the envvar, you prefix it with the dollar sign: `$PATH`.
 
   * HOME. Your home directory. Don't change this.
 
@@ -927,6 +958,24 @@ Environment variables
   Some programs do this for you upon installation (although they often inform or ask you first), e.g., if you are installing miniconda or micromamba.
 
 
+Scripts
+-------
+
+Shell scripting is not dealt with in this introduction (it's long enough as it is); which means you miss out on some conveniences like for loops or if-else statements. But, with the above (and below) set of commands, you can always put these on separate lines in a text file, then run the text file with a simple
+
+```
+bash commands.sh
+```
+
+This will simply execute the given shell commands in `commands.sh` line by line.
+
+`.sh` or `.bash` is a good extension to use for anything that resembles a shell script; or perhaps `.rc` if it's mostly setting up environment variables.
+
+Note that I prefer to use `bash` here, not `zsh`, as `bash` tends to
+be more generally installed on OSes than zsh (but `zsh` is almost
+everywhere available, just perhaps not installed).
+
+
 Extras
 ------
 
@@ -937,13 +986,34 @@ Extras
 
 * There is a special "file", `/dev/null`, which works like a black hole: any output from a program redirected to this file will just be absorbed, and nothing shown; the same works for error output (`stderr`), although I don't advice to send errors to `/dev/null`.
 
-Example: `ls > /dev/null` will send the listing of files to `/dev/null`, causing no output to be shown. (To be clear: it is output of `ls`, the *listing*, that goes to `/dev/null`, not the files themselves.)
+Example: `ls > /dev/null` will send the listing of files to `/dev/null`, causing no output to be shown. (To be clear: it is the output of `ls`, the *listing*, that goes to `/dev/null`, not the files themselves.)
 
 
-### find
+### Symbolic links
+
+Files can be aliased: another file, a so-called symbolic link, can point to the actual file (a short term is "symlink". This doesn't take up any space, as it's just an alias for convenience. If you remove a symbolic link, the original file will stay; if you remove the original file instead, you get a "broken" symbolic link.
+
+Symbolic links can serve as a shorthand (alias), and can be in the same directory. But symbolic links can also be in separate directories, allowing for the same file to appear in multiple directories: if you edit the file in one place, the file is changed everywhere. Multiple symlinks for the same file can exist; you can even have symlinks to symlinks.
+
+Directories can also be symlinked, with the same effect. To remove a symlink to a directory, don't use the `-r` option with `rm`: just `rm <my-symlinked-directory>` is enough.
+
+Symbolic links can be seen with `ls -l`: their permission list starts with an `l`. They are also often differently coloured, and the long listing often shows them with an arrow pointing to their original, like `symlinked-file.txt -> file.txt`.
+
+To create a symbolic link, use the `ln -s` command (`ln` for link, `-s` for symbolic):
+
+```
+ln -s file.txt symlinked-file.txt
+ln -s somedir symlinked-directory
+rm symlinked-file.txt symlinked-directory
+```
+
+Note that without the `-s`, you create so-called "hard links", which are actual linked duplicates, using the same data on disk; change one and you'll change the other. Hard links are often used by a backup program for incremental backups: you can create a duplicate of the same file at another backup date without needed extra space. But deleting the copy or the original still keeps the other around in a valid state, unlike symbolic links. Note that hard links work on files only; they don't work on directories.
 
 
-  find is a very useful, but at times cumbersome, command
+### Find
+
+
+  `find` is a very useful, but at times cumbersome, command
 
   Basic usage:
 
@@ -1008,7 +1078,7 @@ Example: `ls > /dev/null` will send the listing of files to `/dev/null`, causing
     Finally, xargs can hand out the input to parallel processes; convenient for something that requires a bit of calculation
 
     ```
-    find . - type f -print0 | xargs -0 -P8 grep keyword
+    find . -type f -print0 | xargs -0 -P8 grep keyword
     ```
 
   By this time, you're almost better off with programming a short Python script or similar.
@@ -1182,3 +1252,47 @@ You can start a process as normal, but redirect stdout and stderr. Once you have
 
 
 As a final note on this topic: processes will keep running, whether you exit the terminal, close a remote connection if you're logged into another machine, or log out from your desktop environment. If you put your machine to sleep (suspend), common on laptops, the process will also be suspended until the laptop wakes up. And if you shut down or reboot the machine, the process will be killed, and *not* automatically restart (doing that is a whole other topic again).
+
+
+### Man pages
+
+Linux (Unix) man (manual) pages are at the bottom here, but are actually rather important. These serve as the actual reference manual for installed commands. They originate from the time when the internet, with manuals, Q&A sites and LLMs wasn't widely available, and you wanted to look up details about a specifi command. And they still allow you to do that, which is particularly convenient when a program's behaviour has changed between versions and your result from an internet search refers to another version of the program.
+
+Man pages can, however, be a bit cumbersome to read through: they have all the details, and at times more. One nice thing is that they will often also have examples near the bottom of the manual.
+
+A man page for a specific program, or command, can be accessed with
+
+```
+man ls
+```
+
+It uses the default pager, likely `less`, so the usual keyboard shortcuts work: space bar (or page down) to page down, `w` to go up (or page up), `/` to search, `n` and `shift-n` to go to the next or previous search result, and `q` to quit.
+
+A man page follows a standard layout, with sections in a specific order. Not all sections may be present. The "EXAMPLES" section was already mentioned; "SEE ALSO" can also be useful for finding related commands.
+
+Some commands are shell built-ins: these are not standalone commands, because it is more convenient (for the user) to have them be integrated into your shell. To find these man pages, you'll have to do a bit more effort:
+
+```
+man bash-builtins
+```
+
+or
+
+```
+man zshbuiltins
+```
+
+depending on your shell. Then, search for the specific command with `/`, e.g. type `/cd` to find details about the `cd` command.
+
+If you don't know if a specific command exist for some task, you can (other than searching the internet / asking an LLM) try a search for a keyword within all man pages:
+
+```
+man -k time
+```
+
+shows all commands (and more) related to "time".
+
+There are also "sections" of man pages, with sometimes means you need to preceed the command argument with a number argument to get the right section: `man 1 sleep` is different than `man 3 sleep`: the first is for the shell command, the second for the C sleep function.
+
+
+Finally, if you enjoy a bit of nerd jokes and easter eggs in software, have a read through the question and answer at https://unix.stackexchange.com/questions/405783/why-does-man-print-gimme-gimme-gimme-at-0030 .
