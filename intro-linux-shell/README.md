@@ -125,7 +125,7 @@ NB: "directory" tends to be the Unix term; folder is often used with file browse
 
 * create a file with nano and add a few lines. Close, and open the same file on the command line: `nano newfile.txt`.
 
-  (There is also an editor called `pico`, though it may not be installed on your system. Another modern editor is `micro`, which offers a more user-friendly experience.)
+  (There is also an editor called `pico`, though it may not be installed on your system. There is even `micro`, which is even less common (but generally installable through your package manager) but more modern.)
 
 * Path:
 
@@ -933,7 +933,7 @@ Environment variables
 
   export PATH=$PATH:/new/directory
 
-  The `export` is necessary in case you are using subshells (that is, if you use shells cripts); otherwise a variable set in a resource script such as `~/.bashrc` will not be exported to the shell where the script is run. Note that when you assign, you use `PATH` (the actual name), but when you evaluate (read) the envvar, you prefix it with the dollar sign: `$PATH`.
+  The `export` is necessary in case you are using subshells (that is, if you use shell scripts); otherwise a variable set in a resource script such as `~/.bashrc` will not be exported to the shell where the script is run. Note that when you assign, you use `PATH` (the actual name), but when you evaluate (read) the envvar, you prefix it with the dollar sign: `$PATH`.
 
   * HOME. Your home directory. Don't change this.
 
