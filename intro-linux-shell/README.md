@@ -113,8 +113,9 @@ Navigating and paths
 
 NB: "directory" tends to be the Unix term; folder is often used with file browsers instead.
 
+It is advised to not simple copy the commands, but enter them manually, so that you may encounter some subtleties when using Linux commands. Don't forget to provide correct substitues for anything between `<>`.
 
-* commands for navigating
+* Some commands for navigating around directories are:
 
   `pwd`: print working directory
   `ls`: list files in the directory
