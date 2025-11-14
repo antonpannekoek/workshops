@@ -33,8 +33,16 @@ On Windows, there is a default terminal, but that is not a Unix-like terminal, s
 
 - the Windows Terminal: https://learn.microsoft.com/en-us/windows/terminal/install
 
-If you install them in this order, the Windows Terminal can likely detect (and start, in the background) the WSL once you select it from the tab menu. You now have a fully working Linux shell running under Windows.
+(You'll need the PowerShell initially to install the WSL; later on, you can use the Windows Terminal for everything else.)
 
+If you install them in this order, the Windows Terminal can likely detect (and start, in the background) the WSL once you select it from the tab menu (it's probably called Ubuntu, the default Linux flavour that the WSL uses). You now have a fully working Linux shell running under Windows.
+
+
+#### Note on Windows files access from the WSL
+
+When you use the WSL, you can see that as having a separate machine running inside Windows. As such, the home directories don't match. While you can access files in your Windows user directory directly from the WSL and vice versa, it is probably better (and easier) to keep all files within the home directory under the WSL while working on a project. At the start and the end of a session, you can then copy the files. For this tutorial, you don't even need to do.
+
+To view files in your WSL home directory, use `explorer.exe .` on the command line to open the Explorer. To access your Windows user files from the WSL terminal instead, use the path `/mnt/c/Users/<username>`. (The `/mnt`, short for mount or mounted, indicates you are accessing a different file system; that is indeed the indication that the WSL is separate from Windows.) You may have to allow some permissions for accessing files this way, since to Windows it is as if someone is accessing your file from a separate machine.
 
 
 Why use the shell / command line?
