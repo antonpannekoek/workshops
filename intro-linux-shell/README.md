@@ -294,6 +294,14 @@ ls
 
 where `cp` and `mv` will copy or move a file if the second argument is an existing directory (ie., `temp`).
 
+An important thing to be aware of is that `cp` and `mv` overwrite existing files if the destination file already exist. If you want to avoid that, use the `-i` option, which works for both copy and move:
+
+```
+cp -i data.csv temp
+mv -i data.csv temp
+```
+
+
 `cp` and `mv` can work on multiple files, provided the last argument is a directory: all other (file) arguments will be copied or moved to that directory:
 
 ```
